@@ -213,11 +213,44 @@ void jacob(vector<vector<float>> array) {
     }
 }
 
+void gaussWithPivoting(vector<vector<float>> matrix) {
+    int max_index;
+
+    for (int i = 0; i < matrix[0].size(); i++) {
+        max_index = i;
+        for (int j = i; j < matrix.size(); j++) {
+            if (matrix[j][i] > matrix[max_index][i]) {
+                max_index = j;
+            }
+        }
+        if (max_index != i) {
+            for (int k = 0; k < matrix[0].size(); k++) {
+                float from_value = matrix[i][k];
+                float to_value = matrix[max_index][k];
+                matrix[i][k] = to_value;
+                matrix[max_index][k] = from_value;
+            }
+        }
+    }
+
+    cout << endl << "Pivoting: ";
+    print(matrix);
+
+    matrix = to_triangular_matrix(matrix);
+
+    cout << endl << "Trójkątna: ";
+    print(matrix);
+
+    cout << endl;
+
+    gause(matrix);
+}
+
 int main() {
     int height = 0, width;
 
     ifstream file;
-    file.open("RURL_dane3.txt");
+    file.open("RURL_dane4.txt");
 
     if(file.is_open()) {
         file >> height;
@@ -237,7 +270,7 @@ int main() {
             }
         }
 
-        cout << "Wybierz rozwiązanie: (1, 2, 3)" << endl;
+        cout << "Wybierz rozwiązanie: (1 (Gaussa), 2 (Jacobiego), 3 (Gaussa z pivotingiem))" << endl;
         int solution_number = 0;
         cin >> solution_number;
 
@@ -262,6 +295,12 @@ int main() {
                 print(matrix);
 
                 jacob(matrix);
+
+                break;
+            case 3:
+                print(matrix);
+
+                gaussWithPivoting(matrix);
 
                 break;
             default:
